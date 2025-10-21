@@ -1,0 +1,41 @@
+name: Deploy (dev)
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Assume your new IAM role via OIDC (no secrets)
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::976709231517:role/github-oidc-cdk-deployer
+          # <- paste your role ARN
+          aws-region: ca-central-1
+
+      - name: Install infra deps
+        working-directory: infra
+        run: npm ci
+
+      - name: Build CDK
+        working-directory: infra
+        run: npm run build
+
+      # If your Lambda is plain JS in "lambda/" via Code.fromAsset("lambda"), no compile step needed.
+      # If you used NodejsFunction with TS, add your app build/bundle step here.
+
+      - name: Deploy stack
+        working-directory: infra
+        run: npx cdk deploy <YOUR_STACK_NAME> --require-approval=never # <- replace with cdk ls value

@@ -1,0 +1,29 @@
+name: CI (PR)
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install infra deps
+        working-directory: infra
+        run: npm ci
+
+      - name: Build CDK
+        working-directory: infra
+        run: npm run build
+
+      - name: CDK synth
+        working-directory: infra
+        run: npx cdk synth
+
+      - name: CDK diff
+        working-directory: infra
+        run: npx cdk diff
