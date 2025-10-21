@@ -25,17 +25,17 @@ jobs:
           # <- paste your role ARN
           aws-region: ca-central-1
 
-      - name: Install infra deps
-        working-directory: infra
+      - name: Install deps
+
         run: npm ci
 
       - name: Build CDK
-        working-directory: infra
+
         run: npm run build
 
       # If your Lambda is plain JS in "lambda/" via Code.fromAsset("lambda"), no compile step needed.
       # If you used NodejsFunction with TS, add your app build/bundle step here.
 
       - name: Deploy stack
-        working-directory: infra
+
         run: npx cdk deploy <YOUR_STACK_NAME> --require-approval=never # <- replace with cdk ls value

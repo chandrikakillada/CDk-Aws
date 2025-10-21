@@ -12,18 +12,14 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install infra deps
-        working-directory: infra
+      - name: Install deps
         run: npm ci
 
       - name: Build CDK
-        working-directory: infra
-        run: npm run build
+        run: npm run build # "build": "tsc" in package.json
 
       - name: CDK synth
-        working-directory: infra
         run: npx cdk synth
 
       - name: CDK diff
-        working-directory: infra
         run: npx cdk diff
