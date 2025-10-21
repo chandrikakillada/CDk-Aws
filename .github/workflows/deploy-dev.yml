@@ -38,4 +38,4 @@ jobs:
 
       - name: Deploy stack
 
-        run: npx cdk deploy <YOUR_STACK_NAME> --require-approval=never # <- replace with cdk ls value
+        run: npx cdk deploy MyCdkAppStack --require-approval=never # <- replace with cdk ls value
