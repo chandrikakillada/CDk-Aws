@@ -1,8 +1,14 @@
-*.js
-!jest.config.js
-*.d.ts
+
+# keep ignoring build artifacts, but allow Lambda sources
+lib/**/*.js
+cdk.out
+.cdk.staging
 node_modules
 
-# CDK asset staging directory
-.cdk.staging
-cdk.out
+# allow lambda JS
+!lambda/**/*.js
+!lambda/*.js
+
+# keep any explicit exceptions you had
+!jest.config.js
+*.d.ts
